@@ -60,6 +60,11 @@ void insert_val(link* list, int val, int pre_pos);
 void insert_node(link* list, link nodo, int pre_pos);
 #endif
 
+#ifndef UPDATE
+#define UPDATE
+void updateAtPos(link list, int pos, int update);
+#endif
+
 #ifndef REMOVENODE
 #define REMOVENODE
 void remove_node(link* list, int pos);
@@ -114,6 +119,13 @@ void swap_elements(link* list, unsigned pos1, unsigned pos2);
 #define SETALL
 void set_all_values(link list, int value);
 #endif
+
+
+#ifndef INTERSECT
+#define INTERSECT
+link intersect(link list1, link list2);
+#endif
+
 
 //dumb function
 void print_list (link lista);

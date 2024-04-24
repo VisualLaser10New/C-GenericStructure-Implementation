@@ -21,11 +21,18 @@ link generate_list(size_t size)
 			last = tmp;
 	}
 	last->next = NULL;
+	set_all_values(first, 0);
 	return first;
 }
 
 link last_node(link list)
 {
+	if(list == NULL)
+	{
+		printf("ok");
+		return NULL;
+	}
+
 	link tmp = list;
 	link last = NULL;
 	while(tmp != NULL)
@@ -60,6 +67,7 @@ void append_val(link list, int val)
 void append_node(link list, link nodo)
 {
 	link last = last_node(list);
+	printf("last %d\n", last->value);
 	last->next = nodo;
 }
 
@@ -206,6 +214,29 @@ int* list2arr(link list)
 		count++;
 	}
 	return arr;
+}
+
+link intersect(link list1, link list2)
+{
+	//found and return a list with only elements are in both
+	link output = alloc_node();
+	output->next = NULL;
+	link tmp1 = list1;
+	while(tmp1 != NULL)
+	{
+		link tmp2 = list2;
+		while(tmp2 != NULL)
+		{
+			//printf("%d\n",tmp1->value );
+			if(tmp1-> value == tmp2->value)
+			{
+				append_val(output, tmp1->value);
+			}
+			tmp2 = tmp2->next;
+		}
+		tmp1 = tmp1->next;
+	}
+	return output;
 }
 
 link concat(link list_con, link list_cat)
