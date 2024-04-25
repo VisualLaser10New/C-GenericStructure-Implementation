@@ -394,6 +394,86 @@ void set_all_values_list(link list, int value)
 	}
 }
 
+int sum_all_values_list(link list)
+{
+	int output = 0;
+	link tmp = list;
+	while(tmp != NULL)
+	{
+		output += tmp->value;
+		tmp = tmp->next;
+	}
+	return output;
+}
+
+link sum_parallel_values_list(link list1, link list2)
+{
+	link output=NULL;
+	if(llength(list1) != llength(list2))
+		return NULL;
+	
+	link tmp1 = list1, tmp2 = list2;
+	while(tmp1 != NULL)
+	{
+		append_val(&output, list1->value + list2->value);
+
+		tmp1 = tmp1->next;
+		tmp2 = tmp2->next;
+	}
+	return output;
+}
+
+link max_min_value_list(link list1, char max)
+{
+	//base function for max and min, not declared in header file
+	//1 max, 0 min
+	if(list1==NULL)
+		return NULL;
+	link tmp = list1, output = list1;
+
+	while(tmp != NULL)
+	{
+		if(max)
+		{
+			if(tmp->value > output->value)
+				output = tmp;
+		}
+		else
+		{
+			if(tmp->value < output->value)
+				output = tmp;
+		}
+		tmp = tmp->next;
+	}
+	return output;
+}
+
+link max_value_list(link list)
+{
+	return max_min_value_list(list, 1);
+}
+
+link min_value_list(link list)
+{
+	return max_min_value_list(list, 0);
+}
+
+float avg_value_list(link list)
+{
+	if(list==NULL)
+		return 0.0;
+
+	link tmp = list;
+	float sum = 0; int count = 0;
+	while(tmp != NULL)
+	{
+		sum+= (float)tmp->value;
+		count++;
+		tmp = tmp->next;
+	}
+	return sum/(float)count;
+}
+
 void remove_last(link list)
 {
 	remove_node(&list, llength(list)-1);

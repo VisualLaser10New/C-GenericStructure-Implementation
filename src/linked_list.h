@@ -132,7 +132,32 @@ void set_all_values_list(link list, int value);
 link intersect_list(link list1, link list2);
 #endif
 
+#ifndef SUMALL
+#define SUMALL
+int sum_all_values_list(link list);
+#endif
 
-//dumb function
+#ifndef SUMPARALLEL
+#define SUMPARALLEL
+link sum_parallel_values_list(link list, link list2);
+#endif
+
+#ifndef MAXVAL
+#define MAXVAL
+link max_value_list(link list);
+#endif
+
+#ifndef MINVAL
+#define MINVAL
+link min_value_list(link list);
+#endif
+
+#ifndef AVGVAL
+#define AVGVAL
+float avg_value_list(link list);
+#endif
+
+
+//dumb functions
 void print_list (link lista);
 void print_list_articulate (link lista);
