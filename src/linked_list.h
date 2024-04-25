@@ -10,7 +10,6 @@ typedef struct n
 }node;
 #endif
 
-
 #ifndef LINK
 #define LINK
 typedef node* link;
@@ -21,7 +20,6 @@ typedef node* link;
 #define ALLOCATOR
 link alloc_node();
 #endif
-
 
 #ifndef GENERATOR
 #define GENERATOR
@@ -35,19 +33,22 @@ link arr2list(int arr[], size_t size);
 
 #ifndef APPENDVAL
 #define APPENDVAL
-void append_val(link list, int val);
+void append_val(link *list, int val);
 #endif
-
-
-#ifndef LASTNODE
-#define LASTNODE
-link last_node(link list);
-#endif
-
 
 #ifndef APPENDNODE
 #define APPENDNODE
-void append_node(link list, link nodo);
+void append_node(link *list, link nodo);
+#endif
+
+#ifndef LASTNODE
+#define LASTNODE
+link last_node(link *list);
+#endif
+
+#ifndef SHELLSORT
+#define SHELLSORT
+link shellsort_list(link list);
 #endif
 
 #ifndef INSERTVAL
@@ -77,7 +78,12 @@ link getAtPos(link list, int pos);
 
 #ifndef FIND
 #define FIND
-link find(link list, int needle);
+link find_val_list(link list, int needle);
+#endif
+
+#ifndef CONCAT
+#define CONCAT
+link concat_list(link list_con, link list_cat);
 #endif
 
 #ifndef LLENGTH
@@ -87,7 +93,7 @@ size_t llength(link list);
 
 #ifndef REVERSE
 #define REVERSE
-link reverse_list(link list);
+link reverse_list(link* list);
 #endif
 
 #ifndef LISTARR
@@ -95,14 +101,14 @@ link reverse_list(link list);
 int* list2arr(link list);
 #endif
 
-#ifndef CONCAT
-#define CONCAT
-void list_concat(link list_con, link list_cat);
+#ifndef DUPLICATE
+#define DUPLICATE
+link duplicate_list(link list);
 #endif
 
 #ifndef DESTROY
 #define DESTROY
-void destroyl(link list);
+void destroy_list(link* list);
 #endif
 
 #ifndef RMLAST
@@ -112,20 +118,21 @@ void remove_last(link list);
 
 #ifndef SWAP
 #define SWAP
-void swap_elements(link* list, unsigned pos1, unsigned pos2);
+void swap_elements_list(link* list, unsigned pos1, unsigned pos2);
 #endif
 
 #ifndef SETALL
 #define SETALL
-void set_all_values(link list, int value);
+void set_all_values_list(link list, int value);
 #endif
 
 
 #ifndef INTERSECT
 #define INTERSECT
-link intersect(link list1, link list2);
+link intersect_list(link list1, link list2);
 #endif
 
 
 //dumb function
 void print_list (link lista);
+void print_list_articulate (link lista);

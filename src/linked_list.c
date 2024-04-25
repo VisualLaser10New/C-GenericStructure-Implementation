@@ -21,19 +21,18 @@ link generate_list(size_t size)
 			last = tmp;
 	}
 	last->next = NULL;
-	set_all_values(first, 0);
+	set_all_values_list(first, 0);
 	return first;
 }
 
-link last_node(link list)
+link last_node(link *list)
 {
-	if(list == NULL)
+	if(*list == NULL)
 	{
-		printf("ok");
 		return NULL;
 	}
 
-	link tmp = list;
+	link tmp = *list;
 	link last = NULL;
 	while(tmp != NULL)
 	{
@@ -46,7 +45,6 @@ link last_node(link list)
 void print_list (link lista)
 {
 	link tmp= lista;
-	//printf("Max Verstappen\n");
 	while(tmp!= NULL)
 	{
 		printf("%i -> ", tmp->value);
@@ -55,7 +53,25 @@ void print_list (link lista)
 	printf("NULL\n");
 }
 
-void append_val(link list, int val)
+void print_list_articulate (link lista)
+{
+	link tmp= lista;
+	//printf("Max Verstappen\n");
+	for(int i=0; i<llength(lista); i++)
+	{
+		printf("[%i]\t", i);
+	}
+	printf("\n");
+
+	while(tmp!= NULL)
+	{
+		printf("%i ->\t", tmp->value);
+		tmp = tmp->next;
+	}
+	printf("NULL\n");
+}
+
+void append_val(link *list, int val)
 {
 	link nodo = alloc_node();
 	nodo->value= val;
@@ -64,11 +80,17 @@ void append_val(link list, int val)
 	append_node(list, nodo);
 }
 
-void append_node(link list, link nodo)
+void append_node(link *list, link nodo)
 {
 	link last = last_node(list);
-	printf("last %d\n", last->value);
-	last->next = nodo;
+	if (last == NULL)
+	{
+		*list = nodo;
+	}
+	else
+	{
+		last->next = nodo;
+	}
 }
 
 void updateAtPos(link list, int pos, int update)
@@ -96,7 +118,7 @@ link getAtPos(link list, int pos)
 	return NULL;
 }
 
-link find(link list, int needle)
+link find_val_list(link list, int needle)
 {
 	link tmp= list;
 	while(tmp!= NULL)
@@ -185,11 +207,11 @@ void remove_node(link* list, int pos)
 	free(node);
 }
 
-link reverse_list(link list)
+link reverse_list(link* list)
 {
 	link out = last_node(list);
 	link pre_node = NULL;
-	link now_node = list;
+	link now_node = *list;
 	link next_node = NULL;
 
 	while(now_node != NULL)
@@ -216,11 +238,11 @@ int* list2arr(link list)
 	return arr;
 }
 
-link intersect(link list1, link list2)
+link intersect_list(link list1, link list2)
 {
 	//found and return a list with only elements are in both
-	link output = alloc_node();
-	output->next = NULL;
+	link output = NULL; //= alloc_node();
+	//output->next = NULL;
 	link tmp1 = list1;
 	while(tmp1 != NULL)
 	{
@@ -230,7 +252,7 @@ link intersect(link list1, link list2)
 			//printf("%d\n",tmp1->value );
 			if(tmp1-> value == tmp2->value)
 			{
-				append_val(output, tmp1->value);
+				append_val(&output, tmp1->value);
 			}
 			tmp2 = tmp2->next;
 		}
@@ -239,24 +261,109 @@ link intersect(link list1, link list2)
 	return output;
 }
 
-link concat(link list_con, link list_cat)
+link duplicate_list(link list)
 {
-	last_node(list_con)->next = list_cat;
+	link out = NULL;
+	link tmp = list;
+
+	while(tmp!=NULL)
+	{
+		append_val(&out, tmp->value);
+		tmp = tmp->next;
+	}
+	return out;
 }
 
-void destroyl(link list)
+link concat_list(link list_con, link list_cat)
 {
-	link tmp = list;
+	link out_con = duplicate_list(list_con);
+	link out_cat = duplicate_list(list_cat);
+
+	last_node(&out_con)->next = out_cat;
+	return out_con;
+}
+
+void destroy_list(link* list)
+{
+	link tmp = *list;
 	while(tmp != NULL)
 	{
-		tmp = list->next;
-		free(list);
-		list = tmp;
+		tmp = (*list)->next;
+		free(*list);
+		*list = tmp;
 	}
 	free(tmp);
+	*list= NULL;
 }
 
-void swap_elements(link* list, unsigned pos1, unsigned pos2)
+link shellsort_list(link list)
+{
+	//shell sort a list ascending
+	link output = duplicate_list(list);
+	size_t len = llength(list);
+	size_t k=len, position=0, real_position =0;
+	char back = 0; //if came back is 1, otherwise is 0
+	k/=2;
+	//printf("len: %d\n k:%d\n", len, k);
+	while(1)
+	{
+		//printf("k: %d\n", k);
+		if(k!= 0 && position+k > len-1 && !back)
+		{
+			//end of this view size
+			position=0;
+			k/=2;
+		}
+		else if(k<=1 && position+k > len-1)
+		{
+			//end
+			break;
+		}
+		
+		if(k==0)
+		{
+			//end
+			break;
+		}
+		// printf("pos: %d\t pos+k: %d\t back:%d\n", position, position+k, back);
+		// print_list(output);
+		// printf("maybe to swap: %d > %d\n", getAtPos(output, position)->value, getAtPos(output, position+k)->value);
+		// scanf("%*c");
+		if(getAtPos(output, position)->value > getAtPos(output, position+k)->value)
+		{
+			//swap elements
+			swap_elements_list(&output, position, position+k);
+			//printf("SWAPPED\n");
+			if((int)position-(int)k >= 0)
+			{
+				//back to check previous values
+				//printf("back\n");
+				if(back==0)
+				{
+					//store real position only if back was not active yet
+					real_position= position;
+					back = 1;
+				}
+				position-=k;
+				continue;
+			}
+		}
+		else
+		{
+			if(back)
+			{
+				//stop coming back
+				position = real_position+1;
+				back =0;
+				continue;
+			}
+		}
+		position++;
+	}
+	return output;
+}
+
+void swap_elements_list(link* list, unsigned pos1, unsigned pos2)
 {
 	size_t len = llength(*list);
 	if((size_t)pos1 >= len || (size_t)pos2 >= len || pos1 >= pos2)
@@ -277,7 +384,7 @@ void swap_elements(link* list, unsigned pos1, unsigned pos2)
 	remove_node(list, pos2);
 }
 
-void set_all_values(link list, int value)
+void set_all_values_list(link list, int value)
 {
 	link tmp = list;
 	while(tmp!=NULL)
