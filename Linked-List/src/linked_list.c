@@ -181,6 +181,7 @@ void insert_node(link* list, link ins_node, int pre_pos)
 {
 	if(pre_pos==-1)
 	{
+		//head insert
 		ins_node->next=*list;
 		*list = ins_node;
 	}

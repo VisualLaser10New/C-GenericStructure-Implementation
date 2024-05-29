@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+//stack implemented with array
+
 #ifndef STACK
 #define STACK
 typedef int DATA_S_A;

@@ -1,5 +1,8 @@
 #include "stack_a.h"
 
+//stack implemented with array
+
+
 stack_a alloc_stack_a(size_t len)
 {
     stack_a stack_tmp;
