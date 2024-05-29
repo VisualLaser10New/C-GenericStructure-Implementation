@@ -22,7 +22,7 @@ void push_stack_a(stack_a *stack, DATA_S_A value)
         //double the len size
         _realloc_stack_a(stack, 2*(stack->_alloc_len));
     }
-    stack->_arr[(stack->len)++] = value;
+    stack->_arr[(stack->_len)++] = value;
 }
 
 DATA_S_A pop_stack_a(stack_a *stack)
