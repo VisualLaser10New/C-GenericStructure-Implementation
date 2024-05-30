@@ -1,10 +1,20 @@
 #include "stack_l.h"
 
 //stack implemented with linked list
+
+stack_l init_stack_l()
+{
+	stack_l tmp_stack = (stack_l)malloc(sizeof(stack_l));
+	tmp_stack->_len = 0;
+	tmp_stack->_top = NULL;
+	return tmp_stack;
+}
+
 void push_stack_l(stack_l stack, DATA_S_L value)
 {
 	//every element is inserted on the head of the list
-	insert_val(stack->_top, value, -1);
+	//printf("%p", stack->_top);
+	insert_val(&(stack->_top), value, -1);
 	(stack->_len)++;
 }
 
@@ -12,8 +22,8 @@ DATA_S_L pop_stack_l(stack_l stack)
 {
 	if(stack->_len == 0)
 		return 0;
-	DATA_S_L _output_temp = (*(stack->_top))->value;
-	remove_node(stack->_top, 0);
+	DATA_S_L _output_temp = (stack->_top)->value;
+	remove_node(&(stack->_top), 0);
 	(stack->_len)--;
 	return _output_temp;
 }
@@ -22,7 +32,7 @@ DATA_S_L peek_stack_l(stack_l stack)
 {
 	if(stack->_len == 0)
 		return 0;
-	return (*(stack->_top))->value;
+	return (stack->_top)->value;
 }
 
 
@@ -38,5 +48,5 @@ bool is_empty_stack_l(stack_l stack)
 
 void dispose_stack_l(stack_l stack)
 {
-	destroy_list(stack->_top);
+	destroy_list(&(stack->_top));
 }

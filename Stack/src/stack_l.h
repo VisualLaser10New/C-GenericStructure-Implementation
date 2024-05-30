@@ -5,20 +5,22 @@
 
 //stack implemented with linked list
 
-#ifndef STACK
-#define STACK
+#ifndef STACK_L
+#define STACK_L
 typedef int DATA_S_L;
 
 typedef struct 
 {
 	size_t _len;
-	link * _top; //be a pointer cause the fuctions could edit the list's head
-}*stack_l; //be a pointer because functions must edit the _len
+	link _top; //be a pointer cause the fuctions could edit the list's head
+}* stack_l; //be a pointer because functions must edit the _len
 #endif
 
 
 //some function, unlike the stack implementation with array, 
 //there aren't cause every node is allocated when is required
+
+stack_l init_stack_l();
 
 void push_stack_l(stack_l stack, DATA_S_L value);
 
