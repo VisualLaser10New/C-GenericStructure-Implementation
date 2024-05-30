@@ -4,7 +4,7 @@
 #include "stack_l.h"
 #include "stack_a.h"
 
-//To compile: gcc main.c ./src/*.c ../Linked-List/src/*.c -I./src/ -I../Linked-List/src/ -o ./main-example
+//To compile: gcc main.c ./src/*.c ../Linked-List/src/*.c -I./src/ -I../Linked-List/src/ -o ./main_example
 
 int main_stack_l()
 {
@@ -16,7 +16,7 @@ int main_stack_l()
 	push_stack_l(stack, 4);
 	push_stack_l(stack, 5);
 	
-	printf("Stack: ");
+	printf("Stack Linked List: ");
 	while(!is_empty_stack_l(stack))
 	{
 		printf("%d ", pop_stack_l(stack));
@@ -38,7 +38,7 @@ int main_stack_a()
 	push_stack_a(stack, 4);
 	push_stack_a(stack, 5);
 	
-	printf("Stack: ");
+	printf("Stack Array: ");
 	while(!is_empty_stack_a(stack))
 	{
 		printf("%d ", pop_stack_a(stack));
@@ -52,7 +52,7 @@ int main_stack_a()
 
 int main()
 {
-	//main_stack_l();
+	main_stack_l();
 	main_stack_a();
 	
 	return 0;
