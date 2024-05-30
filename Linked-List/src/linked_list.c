@@ -286,14 +286,13 @@ link concat_list(link list_con, link list_cat)
 
 void destroy_list(link* list)
 {
-	link tmp = *list;
-	while(tmp != NULL)
+	link tmp;
+	while(*list != NULL)
 	{
-		tmp = (*list)->next;
-		free(*list);
-		*list = tmp;
+		tmp = (*list);
+		*list = (*list)->next;
+		free(tmp);
 	}
-	free(tmp);
 	*list= NULL;
 }
 

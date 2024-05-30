@@ -1,3 +1,6 @@
+//implementation with circular array
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -38,3 +41,7 @@ bool is_full_queue_a_c(queue_a_c queue);
 void clear_queue_a_c(queue_a_c queue);
 
 void dispose_queue_a_c(queue_a_c queue);
+
+bool contains_queue_a_c(queue_a_c queue, DATA_QAC needle);
+
+DATA_QAC get_element_queue_a_c(queue_a_c queue, int position);

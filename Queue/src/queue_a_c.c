@@ -55,3 +55,56 @@ DATA_QAC peek_queue_a_c(queue_a_c queue)
     }
     return queue->_arr[queue->_head];
 }
+
+size_t get_len_queue_a_c(queue_a_c queue)
+{
+    return queue->_len;
+}
+
+bool is_empty_queue_a_c(queue_a_c queue)
+{
+    return (queue->_len ==0 || queue->_alloc_len ==0);
+}
+
+bool is_full_queue_a_c(queue_a_c queue)
+{
+    return (queue->_len == 0 || queue->_alloc_len-1 == 0);
+}
+
+void clear_queue_a_c(queue_a_c queue)
+{
+    queue->_len =0;
+    queue->_head =0;
+    queue->_tail =0;
+    for(int i = 0; i<queue->_alloc_len; i++)
+    {
+        (queue->_arr)[i] =0;
+    }
+}
+
+void dispose_queue_a_c(queue_a_c queue)
+{
+    for(int i = 0;i<queue->_alloc_len; i++)
+    {
+        free((queue->_arr)[i]);
+    }
+    free(queue);
+}
+
+
+DATA_QAC get_element_queue_a_c(queue_a_c queue, int position)
+{
+    return (queue->_arr)[(position+(queue->_head))%(queue->_alloc_len)];
+}
+
+bool contains_queue_a_c(queue_a_c queue, DATA_QAC needle)
+{
+    for(int i = queue->_head; i != queue->_tail; i= ((i+1)%(queue->_alloc_len)))
+    {
+        if(queue->_arr[i] == needle)
+        {
+            return true;
+        }
+    }
+    return false;
+}
