@@ -5,6 +5,9 @@
 
 stack_a alloc_stack_a(size_t len)
 {
+    if(len <= 0)
+        return NULL;
+    
     stack_a stack_tmp = (stack_a)malloc(sizeof(stack_a));
     stack_tmp->_arr = (DATA_S_A*)malloc(sizeof(DATA_S_A) * len);
     stack_tmp->_len = 0;
