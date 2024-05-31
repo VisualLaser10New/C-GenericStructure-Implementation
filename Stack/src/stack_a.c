@@ -8,8 +8,17 @@ stack_a alloc_stack_a(size_t len)
     if(len <= 0)
         return NULL;
     
-    stack_a stack_tmp = (stack_a)malloc(sizeof(stack_a));
+    stack_a stack_tmp = (stack_a)malloc(sizeof(*stack_tmp));
+    if (stack_tmp == NULL) {
+        return NULL;  // Failed to allocate memory for queue_tmp
+    }
+
     stack_tmp->_arr = (DATA_S_A*)malloc(sizeof(DATA_S_A) * len);
+    if (stack_tmp->_arr == NULL) {
+        free(stack_tmp);  // Failed to allocate memory for queue_tmp->_arr, so free queue_tmp before returning
+        return NULL;
+    }
+
     stack_tmp->_len = 0;
     stack_tmp->_alloc_len = len;
     return stack_tmp;
@@ -74,7 +83,12 @@ void clear_stack_a(stack_a stack)
 
 void dispose_stack_a(stack_a stack)
 {
-    free(stack->_arr);
-    stack->_alloc_len = 0;
-    stack->_len = 0;
+    if(stack != NULL) {
+        if(stack->_arr != NULL) {
+            free(stack->_arr);
+            stack->_arr = NULL;  // Avoid dangling pointer
+        }
+        free(stack);
+        stack = NULL;  // Avoid dangling pointer
+    }
 }

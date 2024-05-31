@@ -6,8 +6,8 @@
 #include <stdbool.h>
 
 
-#ifndef QUEUE_AC;
-#define QUEUE_AC;
+#ifndef QUEUE_AC
+#define QUEUE_AC
 
 typedef int DATA_QAC;
 
@@ -16,8 +16,8 @@ typedef struct
     DATA_QAC * _arr;
     size_t _len;
     size_t _alloc_len;
-    unsigned long long _head;
-    unsigned long long _tail;
+    long _head;
+    long _tail;
 }* queue_a_c;
 
 #endif

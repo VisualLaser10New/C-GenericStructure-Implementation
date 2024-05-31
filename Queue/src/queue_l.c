@@ -71,7 +71,7 @@ void dispose_queue_l(queue_l queue)
 
 void clear_queue_l(queue_l queue)
 {
-	destroy_list(queue->_head);
+	destroy_list(&(queue->_head));
 
 	queue->_head = NULL;
 	queue->_tail = NULL;
@@ -85,5 +85,5 @@ bool contains_queue_l(queue_l queue, DATA_QL needle)
 
 DATA_QL get_element_queue_l(queue_l queue, int position)
 {
-	return (DATA_QL)getAtPos(queue->_head, position);
+	return (DATA_QL)getAtPos(queue->_head, position)->value;
 }

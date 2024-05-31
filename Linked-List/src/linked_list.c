@@ -4,7 +4,7 @@
 
 link alloc_node()
 {
-	return (link)malloc(sizeof(link));
+	return (link)malloc(sizeof(node));
 }
 
 link generate_list(size_t size)

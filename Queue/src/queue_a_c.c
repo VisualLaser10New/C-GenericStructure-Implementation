@@ -7,8 +7,17 @@ queue_a_c alloc_queue_a_c(size_t len)
     if(len <= 0)
         return NULL;
 
-    queue_a_c queue_tmp = (queue_a_c)malloc(sizeof(queue_a_c));
+    queue_a_c queue_tmp = (queue_a_c)malloc(sizeof(*queue_tmp)); //to allocate the size of struct and non the size of the pointer, use *queue_tmp
+    if (queue_tmp == NULL) {
+        return NULL;  // Failed to allocate memory for queue_tmp
+    }
+
     queue_tmp->_arr = (DATA_QAC*)malloc(sizeof(DATA_QAC)*len);
+    if (queue_tmp->_arr == NULL) {
+        free(queue_tmp);  // Failed to allocate memory for queue_tmp->_arr, so free queue_tmp before returning
+        return NULL;
+    }
+
     queue_tmp->_len = 0;
     queue_tmp->_alloc_len = len;
     queue_tmp->_head = 0;
@@ -36,13 +45,14 @@ void enqueue_a_c(queue_a_c queue, DATA_QAC value)
 
 DATA_QAC dequeue_a_c(queue_a_c queue)
 {
+    
     if(queue->_len == 0 || queue->_alloc_len == 0)
     {
         return 0;
     }
     DATA_QAC ret_temp = queue->_arr[queue->_head];
     queue->_arr[queue->_head] = 0;
-    queue->_head = (queue->_head -1) % queue->_alloc_len;
+    queue->_head = (queue->_head + 1) % queue->_alloc_len;
     (queue->_len)--;
     return ret_temp;
 }
@@ -78,17 +88,20 @@ void clear_queue_a_c(queue_a_c queue)
     queue->_tail =0;
     for(int i = 0; i<queue->_alloc_len; i++)
     {
-        (queue->_arr)[i] =0;
+        (queue->_arr)[i] = (DATA_QAC)0;
     }
 }
 
 void dispose_queue_a_c(queue_a_c queue)
 {
-    for(int i = 0;i<queue->_alloc_len; i++)
-    {
-        free((queue->_arr)[i]);
+    if(queue != NULL) {
+        if(queue->_arr != NULL) {
+            free(queue->_arr);
+            queue->_arr = NULL;  // Avoid dangling pointer
+        }
+        free(queue);
+        queue = NULL;  // Avoid dangling pointer
     }
-    free(queue);
 }
 
 

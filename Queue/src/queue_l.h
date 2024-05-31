@@ -6,8 +6,8 @@
 #include "linked_list.h"
 
 
-#ifndef QUEUE_L;
-#define QUEUE_L;
+#ifndef QUEUE_L
+#define QUEUE_L
 
 typedef int DATA_QL;
 
