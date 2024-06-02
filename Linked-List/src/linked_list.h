@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+#define max(a,b) ({ __typeof__ (a) _a = (a); __typeof__ (b) _b = (b); _a > _b ? _a : _b; })
+#define min(a,b) ({ __typeof__ (a) _a = (a); __typeof__ (b) _b = (b); _a < _b ? _a : _b; })
+
 #ifndef NODE
 #define NODE
 typedef struct n
@@ -51,6 +55,11 @@ link last_node(link *list);
 link shellsort_list(link list);
 #endif
 
+#ifndef MERGESORT
+#define MERGESORT
+link mergesort_list(link list);
+#endif
+
 #ifndef INSERTVAL
 #define INSERTVAL
 void insert_val(link* list, int val, int pre_pos);
@@ -73,7 +82,7 @@ void remove_node(link* list, int pos);
 
 #ifndef GETPOS
 #define GETPOS
-link getAtPos(link list, int pos);
+link getAtPos(link list, unsigned pos);
 #endif
 
 #ifndef FIND
@@ -114,6 +123,21 @@ void destroy_list(link* list);
 #ifndef RMLAST
 #define RMLAST
 void remove_last(link list);
+#endif
+
+#ifndef SUBLIST
+#define SUBLIST
+link sublist(link list, unsigned from, unsigned to);
+#endif
+
+#ifndef MERGEPROCESS
+#define MERGEPROCESS
+link _merge_sorting_list(link first, link second);
+#endif
+
+#ifndef COPYLIST
+#define COPYLIST
+link clone_list(link *list);
 #endif
 
 #ifndef SWAP

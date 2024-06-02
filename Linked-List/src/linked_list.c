@@ -55,20 +55,27 @@ void print_list (link lista)
 
 void print_list_articulate (link lista)
 {
+	size_t len = llength(lista);
 	link tmp= lista;
 	//printf("Max Verstappen\n");
-	for(int i=0; i<llength(lista); i++)
+	for(int i=0; i<len; i++)
 	{
-		printf("[%i]\t", i);
+		printf("[%i]\t\t\t", i);
 	}
 	printf("\n");
 
 	while(tmp!= NULL)
 	{
-		printf("%i ->\t", tmp->value);
+		printf("%i ->\t\t\t", tmp->value);
 		tmp = tmp->next;
 	}
 	printf("NULL\n");
+	tmp = lista;
+	for(int i =0; i< len; i++)
+	{
+		printf("[%p]\t", tmp);
+		tmp = tmp->next;
+	}
 }
 
 void append_val(link *list, int val)
@@ -99,12 +106,10 @@ void updateAtPos(link list, int pos, int update)
 	node->value=update;
 }
 
-link getAtPos(link list, int pos)
+link getAtPos(link list, unsigned pos)
 {
 	if((size_t)pos >= llength(list) || pos < 0)
-	{
 		return NULL;
-	}
 
 	int c=0;
 	link tmp= list;
@@ -361,6 +366,112 @@ link shellsort_list(link list)
 		position++;
 	}
 	return output;
+}
+
+link mergesort_list(link list)
+{
+	//mergesort recursive:
+	/*
+	1) when list len is 1, return 
+	2) call this function by passing partitioning list
+	3) after call get the returned array and by searching lowest value compose the sorted array
+	*/
+	//1
+	if(list == NULL)
+		return NULL;
+
+	size_t len = llength(list);
+	if(len == 0)
+		return NULL;
+	if(len == 1)
+		return list;
+	
+	//2
+	--len; //cause 0 base
+
+	link firstmid = mergesort_list(sublist(list, 0, (unsigned)(len/2))); //from 0 to mid
+
+	link secondmid = mergesort_list(sublist(list, (unsigned)((len/2)+1),(unsigned) len)); //from mid+1 to len
+	//3
+	return _merge_sorting_list(firstmid, secondmid);
+}
+
+link _merge_sorting_list(link first, link second)
+{
+	link sorted_list = NULL;
+	size_t len_first = llength(first);
+	size_t len_second = llength(second);
+
+	for(int i = 0;i< (len_first + len_second); i++)
+	{
+		if(first != NULL && second != NULL)
+		{
+			if(first->value < second->value)
+			{
+				append_val(&sorted_list, first->value);
+				first = first->next;
+			}
+			else
+			{
+				append_val(&sorted_list, second->value);
+				second = second->next;
+			}
+		}
+		else
+		{
+			//append the rest
+			if(first != NULL)
+			{
+				append_val(&sorted_list, first->value);
+				first = first->next;
+			}
+			else
+			{
+				append_val(&sorted_list, second->value);
+				second = second->next;
+			}
+		}
+	}
+	return sorted_list;
+}
+
+link clone_list(link* list)
+{
+	link tmp = *list;
+	link clone = NULL;
+	link back_tmp_clone = NULL;
+	link tmp_clone = NULL;
+	while(tmp != NULL)
+	{
+		tmp_clone=alloc_node();
+		tmp_clone->value= tmp->value;
+
+		if(clone != NULL)
+			back_tmp_clone->next = tmp_clone;
+		else
+			clone = tmp_clone;
+
+		back_tmp_clone = tmp_clone;
+		tmp= tmp->next;
+	}
+	return clone;
+}
+
+link sublist(link list, unsigned from, unsigned to)
+{
+	size_t len = llength(list);
+
+	if(len == 0 || to >= len || from > to || from >= len)
+		return NULL;
+
+	link listclone = clone_list(&list);
+	listclone = getAtPos(listclone, from);
+	link clone_tail = getAtPos(listclone, to-from);
+
+	//dispose rest of list
+	destroy_list(&(clone_tail->next));
+	clone_tail->next = NULL;
+	return listclone;
 }
 
 void swap_elements_list(link* list, unsigned pos1, unsigned pos2)
