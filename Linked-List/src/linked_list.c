@@ -58,9 +58,9 @@ void print_list_articulate (link lista)
 	size_t len = llength(lista);
 	link tmp= lista;
 	//printf("Max Verstappen\n");
-	for(int i=0; i<len; i++)
+	for(size_t i=0; i<len; i++)
 	{
-		printf("[%i]\t\t\t", i);
+		printf("[%li]\t\t\t", i);
 	}
 	printf("\n");
 
@@ -71,7 +71,7 @@ void print_list_articulate (link lista)
 	}
 	printf("NULL\n");
 	tmp = lista;
-	for(int i =0; i< len; i++)
+	for(size_t i =0; i< len; i++)
 	{
 		printf("[%p]\t", tmp);
 		tmp = tmp->next;
@@ -108,10 +108,10 @@ void updateAtPos(link list, int pos, int update)
 
 link getAtPos(link list, unsigned pos)
 {
-	if((size_t)pos >= llength(list) || pos < 0)
+	if((size_t)pos >= llength(list))
 		return NULL;
 
-	int c=0;
+	size_t c=0;
 	link tmp= list;
 	while(tmp!= NULL)
 	{
@@ -151,7 +151,6 @@ link getprec(link list, link node)
 {
 	if(list == node) //if is first return NULL
 		return NULL;
-	size_t c=0;
 	link tmp= list;
 	if(tmp==NULL) return NULL;
 	while(tmp->next != NULL)
@@ -402,7 +401,7 @@ link _merge_sorting_list(link first, link second)
 	size_t len_first = llength(first);
 	size_t len_second = llength(second);
 
-	for(int i = 0;i< (len_first + len_second); i++)
+	for(size_t i = 0;i< (len_first + len_second); i++)
 	{
 		if(first != NULL && second != NULL)
 		{

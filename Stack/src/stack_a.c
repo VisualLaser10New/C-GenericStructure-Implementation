@@ -69,7 +69,7 @@ bool is_empty_stack_a(stack_a stack)
 
 bool is_full_stack_a(stack_a stack)
 {
-    return (stack->_len != 0);
+    return (stack->_len == stack->_alloc_len);
 }
 
 void clear_stack_a(stack_a stack)
