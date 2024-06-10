@@ -588,3 +588,86 @@ void remove_last(link list)
 {
 	remove_node(&list, llength(list)-1);
 }
+
+
+link shift_list(link list, long offset, int pad_values)
+{
+	/*
+		Non rotating shift, offset times
+		> positive offset shift right
+		> negative offset shift left
+
+		//all holes are padded with pad_values
+	*/
+	link ret_list = clone_list(&list);
+	if(ret_list==NULL || offset == 0)
+		return ret_list;
+
+	if(offset > 0)
+	{
+		//right shift, i times
+		for(long i = 0; i< offset; i++)
+		{
+			//shift all list i time
+			link tmp = ret_list;
+			int previous_value = pad_values;
+			for(; tmp !=NULL; tmp=tmp->next)
+			{
+				//shift all node
+				int current_value = tmp->value;
+				tmp->value= previous_value;
+				previous_value= current_value;
+			}
+		}
+	}
+	else if(offset < 0)
+	{
+		//left shift, i times
+		offset *=-1; //abs of offset
+		for(long i = 0; i< offset; i++)
+		{
+			//shift all list i times
+			link tmp = ret_list;
+			for(; tmp->next !=NULL; tmp=tmp->next)
+			{
+				//shift all node
+				tmp->value= tmp->next->value;
+			}
+			tmp->value=pad_values;
+		}
+	}
+	return ret_list;
+}
+
+link rotating_shift_list(link list, long offset)
+{
+	link ret_list = clone_list(&list);
+	if(ret_list == NULL || offset == 0)
+		return ret_list;
+
+
+	long sign_offset = (offset >= 0) ? 1: -1;
+	long abs_offset= offset * sign_offset;
+
+	for(long i = 0; i<abs_offset; i++)
+	{
+		//rotating shift i times
+		int pad_value = 0;
+		if(sign_offset < 0 )
+		{
+			//if left shift, pad_value is the first value of list
+			pad_value = ret_list->value;
+		}
+		else
+		{
+			//if right shift the pad value is the last value of list
+			pad_value = last_node(&ret_list)->value;
+		}
+		
+		link tmp_ret_list = shift_list(ret_list, sign_offset, pad_value);
+		destroy_list(ret_list); //dispose previous list, because shift_list generate a clone of the list each time
+		ret_list = tmp_ret_list;
+	}
+
+	return ret_list;
+}

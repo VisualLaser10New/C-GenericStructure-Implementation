@@ -181,6 +181,12 @@ link min_value_list(link list);
 float avg_value_list(link list);
 #endif
 
+#ifndef SHIFTING
+#define SHIFTING
+link shift_list(link list, long offset, int pad_values);
+link rotating_shift_list(link list, long offset);
+#endif
+
 
 //dumb functions
 void print_list (link lista);
