@@ -176,8 +176,9 @@ matrix * _matrix_get_square_submatrices_from_rectangle(matrix mat, size_t *numbe
 	*/
 	if(mat->cols == mat->rows)
 	{
+		matrix * ret_mat = &mat;
 		*number_of_submatrix = 1;
-		return mat;
+		return ret_mat;
 	}
 
 	matrix * ret_matrices = (matrix*)malloc(sizeof(matrix)*(unsigned long)((mat->cols*(mat->cols-1))/2));
