@@ -135,7 +135,10 @@ unsigned long matrix_rank(matrix mat)
 matrix * matrix_get_square_submatrices(matrix mat, size_t *number_of_submatrix)
 {
 	if(mat->cols == 0 || mat->rows == 0 || mat->matrix == NULL)
+	{
+		*number_of_submatrix = -1;
 		return NULL;
+	}
 	
 	matrix *ret_array_matrix = (matrix*)malloc(sizeof(matrix) * (mat->cols* mat->rows));
 	if(mat->cols != mat->rows)
@@ -164,7 +167,7 @@ matrix * matrix_get_square_submatrices(matrix mat, size_t *number_of_submatrix)
 				counter++;
 			}
 		}
-
+		*number_of_submatrix += counter;
 	}
 	return ret_array_matrix;
 }
