@@ -12,6 +12,19 @@ matrix matrix_alloc(size_t rows, size_t cols)
 	return tmp;
 }
 
+matrix matrix_clone(matrix mat)
+{
+	matrix mat_clone = matrix_alloc(mat->rows, mat->cols);
+	for(size_t i = 0; i< mat->rows; i++)
+	{
+		for(size_t j = 0; j< mat->cols; j++)
+		{
+			mat_clone->matrix[i][j] = mat->matrix[i][j];
+		}
+	}
+	return mat_clone;
+}
+
 int sign(size_t i, size_t j)
 {
 	i++; j++; //position from zero base to one base
@@ -203,7 +216,6 @@ matrix * _matrix_get_square_submatrices_from_rectangle(matrix mat, size_t *numbe
 	return ret_matrices;
 }
 
-
 matrix rotate_matrix(matrix mat)
 {
 	matrix ret_mat = matrix_alloc(mat->cols, mat->rows);
@@ -212,6 +224,75 @@ matrix rotate_matrix(matrix mat)
 		for(size_t mat_j = 0; mat_j < mat->cols; mat_j++)
 		{
 			ret_mat->matrix[mat_j][mat->rows - mat_i - 1] = mat->matrix[mat_i][mat_j];
+		}
+	}
+	return ret_mat;
+}
+
+bool matrix_is_invertible(matrix mat)
+{
+	if(mat == NULL || mat->cols != mat->rows || mat->cols*mat->rows == 0)
+		return false;
+	
+	//a square matrix is invertible if rank is equal to n
+	double det = matrix_det(mat);
+	if(det == 0)
+		return false;
+
+	return true;	
+}
+
+matrix matrix_inverse(matrix mat)
+{
+	if(matrix_is_invertible(mat) == false)
+		return NULL;
+
+	double inverse_det = 1/(matrix_det(mat));
+	/*
+	if mat is invertible
+	calc cofactor_matrix
+	calc transpose of cofactor_matrix
+	multiply got matrix with inverse of det(mat)
+	just it
+	*/
+	return matrix_mul_scalar(matrix_transpose(matrix_cofactor(mat)), inverse_det);
+}
+
+matrix matrix_cofactor(matrix mat)
+{
+	matrix mat_cof = matrix_alloc(mat->rows, mat->cols);
+	for(size_t i = 0; i< mat->rows; i++)
+	{
+		for(size_t j = 0; j< mat->cols; j++)
+		{
+			double cof_sign = (i+j+2)%2 == 0 ? 1 : -1;
+			mat_cof->matrix[i][j] = cof_sign * matrix_det(matrix_complement(mat, i ,j));
+		}
+	}
+	return mat_cof;
+}
+
+matrix matrix_transpose(matrix mat)
+{
+	matrix mat_transp = matrix_alloc(mat->cols, mat->rows);
+	for(size_t i = 0; i< mat->cols; i++)
+	{
+		for(size_t j = 0; j< mat->rows; j++)
+		{
+			mat_transp->matrix[i][j] = mat->matrix[j][i];
+		}
+	}
+	return mat_transp;
+}
+
+matrix matrix_mul_scalar(matrix mat, double scalar)
+{
+	matrix ret_mat = matrix_clone(mat);
+	for(size_t i = 0; i< mat->rows; i++)
+	{
+		for(size_t j = 0; j< mat->cols; j++)
+		{
+			ret_mat->matrix[i][j] *= scalar;
 		}
 	}
 	return ret_mat;

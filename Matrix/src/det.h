@@ -15,6 +15,8 @@ typedef struct mm
 
 matrix matrix_alloc(size_t rows, size_t cols);
 
+matrix matrix_clone(matrix mat);
+
 double matrix_det(matrix mat);
 
 double matrix_det2(matrix mat);
@@ -25,12 +27,22 @@ unsigned long matrix_rank(matrix mat);
 
 int sign(size_t i, size_t j);
 
-void matrix_dispose(matrix mat);
-
-void matrix_print(matrix mat);
-
 matrix * matrix_get_square_submatrices(matrix mat, size_t *number_of_submatrix);
 
 matrix * _matrix_get_square_submatrices_from_rectangle(matrix mat, size_t *number_of_submatrix);
 
 matrix rotate_matrix(matrix mat);
+
+bool matrix_is_invertible(matrix mat);
+
+matrix matrix_inverse(matrix mat);
+
+matrix matrix_cofactor(matrix mat);
+
+matrix matrix_mul_scalar(matrix mat, double scalar);
+
+matrix matrix_transpose(matrix mat);
+
+void matrix_dispose(matrix mat);
+
+void matrix_print(matrix mat);
