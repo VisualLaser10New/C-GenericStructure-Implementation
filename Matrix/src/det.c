@@ -12,8 +12,88 @@ matrix matrix_alloc(size_t rows, size_t cols)
 	return tmp;
 }
 
+bool matrix_is_well_allocated(matrix mat)
+{
+	if(mat == NULL)
+		return false;
+	if(mat->cols == 0 || mat->rows == 0 || mat->matrix == NULL)
+		return false;
+	if(sizeof(*mat) != sizeof(struct mm))
+		return false;
+	return true;
+}
+
+bool matrix_is_equal_size_matrix(matrix mat1, matrix mat2)
+{
+	if(!matrix_is_well_allocated(mat1) || !matrix_is_well_allocated(mat2))
+		return false;
+	if(mat1->rows != mat2->rows || mat1->cols != mat2->cols)
+		return false;
+	return true;
+}
+
+bool matrix_is_equal_matrix(matrix mat1, matrix mat2)
+{
+	if(!matrix_is_well_allocated(mat1) || !matrix_is_well_allocated(mat2))
+		return false;
+	if(!matrix_is_equal_size_matrix(mat1, mat2))
+		return false;
+	for(size_t i = 0; i<mat1->rows; i++)
+	{
+		for(size_t j = 0; j<mat1->cols; j++)
+		{
+			if(mat1->matrix[i][j] != mat2->matrix[i][j])
+				return false;
+		}
+	}
+	return true;
+}
+
+bool matrix_is_square(matrix mat)
+{
+	if(!matrix_is_well_allocated(mat))
+		return false;
+	if(mat->cols != mat->rows)
+	{
+		//if is not a square matrix quit
+		return false;
+	}
+	return true;
+}
+
+bool matrix_is_invertible(matrix mat)
+{
+	if(!matrix_is_square(mat))
+		return false;
+	
+	//a square matrix is invertible if rank is equal to n
+	double det = matrix_det(mat);
+	if(det == 0)
+		return false;
+
+	return true;	
+}
+
+bool matrix_is_nonnegative(matrix mat)
+{
+	if(!matrix_is_well_allocated(mat))
+		return NULL;
+	
+	for(size_t i = 0; i<mat->rows; i++)
+	{
+		for(size_t j = 0; j<mat->cols; j++)
+		{
+			if(mat->matrix[i][j] < 0.0)
+				return false;
+		}
+	}
+	return true;
+}
+
 matrix matrix_clone(matrix mat)
 {
+	if(!matrix_is_well_allocated(mat))
+		return NULL;
 	matrix mat_clone = matrix_alloc(mat->rows, mat->cols);
 	for(size_t i = 0; i< mat->rows; i++)
 	{
@@ -33,6 +113,8 @@ int sign(size_t i, size_t j)
 
 matrix matrix_complement(matrix mat, size_t del_row, size_t del_col)
 {
+	if(!matrix_is_well_allocated(mat))
+		return NULL;
 	//remove a specified column and a specified row in a matrix
 	size_t new_rows = (del_row>=mat->rows) ?mat->rows: mat->rows-1;
 	size_t new_cols = (del_col>=mat->cols) ?mat->cols: mat->cols-1;
@@ -56,11 +138,8 @@ matrix matrix_complement(matrix mat, size_t del_row, size_t del_col)
 
 double matrix_det(matrix mat)
 {
-	if(mat->cols != mat->rows)
-	{
-		//if is not a square matrix quit
+	if(!matrix_is_square(mat))
 		return NAN;
-	}
 	
 	//base
 	if(mat->cols == 2)
@@ -91,6 +170,8 @@ double matrix_det(matrix mat)
 
 double matrix_det2(matrix mat)
 {
+	if(!matrix_is_square(mat))
+		return NAN;
 	return (mat->matrix[0][0]*mat->matrix[1][1])-(mat->matrix[0][1]*mat->matrix[1][0]);
 }
 
@@ -147,7 +228,7 @@ unsigned long matrix_rank(matrix mat)
 
 matrix * matrix_get_square_submatrices(matrix mat, size_t *number_of_submatrix)
 {
-	if(mat->cols == 0 || mat->rows == 0 || mat->matrix == NULL)
+	if(!matrix_is_well_allocated(mat))
 	{
 		*number_of_submatrix = -1;
 		return NULL;
@@ -187,6 +268,7 @@ matrix * matrix_get_square_submatrices(matrix mat, size_t *number_of_submatrix)
 
 matrix * _matrix_get_square_submatrices_from_rectangle(matrix mat, size_t *number_of_submatrix)
 {
+	//internal function
 	/*
 	from a horizontal rectangular matrix extracts all squared submatrices, of rows order
 	*/
@@ -218,6 +300,9 @@ matrix * _matrix_get_square_submatrices_from_rectangle(matrix mat, size_t *numbe
 
 matrix rotate_matrix(matrix mat)
 {
+	if(!matrix_is_well_allocated(mat))
+		return NULL;
+
 	matrix ret_mat = matrix_alloc(mat->cols, mat->rows);
 	for(size_t mat_i = 0; mat_i<mat->rows; mat_i ++)
 	{
@@ -229,22 +314,11 @@ matrix rotate_matrix(matrix mat)
 	return ret_mat;
 }
 
-bool matrix_is_invertible(matrix mat)
-{
-	if(mat == NULL || mat->cols != mat->rows || mat->cols*mat->rows == 0)
-		return false;
-	
-	//a square matrix is invertible if rank is equal to n
-	double det = matrix_det(mat);
-	if(det == 0)
-		return false;
-
-	return true;	
-}
-
 matrix matrix_inverse(matrix mat)
 {
-	if(matrix_is_invertible(mat) == false)
+	if(!matrix_is_well_allocated(mat))
+		return NULL;
+	if(!matrix_is_invertible(mat))
 		return NULL;
 
 	double inverse_det = 1/(matrix_det(mat));
@@ -260,13 +334,15 @@ matrix matrix_inverse(matrix mat)
 
 matrix matrix_cofactor(matrix mat)
 {
+	if(!matrix_is_well_allocated(mat))
+		return NULL;
+
 	matrix mat_cof = matrix_alloc(mat->rows, mat->cols);
 	for(size_t i = 0; i< mat->rows; i++)
 	{
 		for(size_t j = 0; j< mat->cols; j++)
-		{
-			double cof_sign = (i+j+2)%2 == 0 ? 1 : -1;
-			mat_cof->matrix[i][j] = cof_sign * matrix_det(matrix_complement(mat, i ,j));
+		{			
+			mat_cof->matrix[i][j] = sign(i, j) * matrix_det(matrix_complement(mat, i ,j));
 		}
 	}
 	return mat_cof;
@@ -274,6 +350,9 @@ matrix matrix_cofactor(matrix mat)
 
 matrix matrix_transpose(matrix mat)
 {
+	if(!matrix_is_well_allocated(mat))
+		return NULL;
+
 	matrix mat_transp = matrix_alloc(mat->cols, mat->rows);
 	for(size_t i = 0; i< mat->cols; i++)
 	{
@@ -285,8 +364,30 @@ matrix matrix_transpose(matrix mat)
 	return mat_transp;
 }
 
+matrix matrix_sum_matrix(matrix mat1, matrix mat2)
+{
+	if(!matrix_is_well_allocated(mat1) || !matrix_is_well_allocated(mat2))
+		return NULL;
+	if(!matrix_is_equal_size_matrix(mat1, mat2))
+		return NULL;
+
+	matrix ret_sum_mat = matrix_alloc(mat1->rows, mat1->cols);
+
+	for(size_t i = 0; i<mat1->rows; i++)
+	{
+		for(size_t j = 0; j<mat2->cols; j++)
+		{
+			ret_sum_mat->matrix[i][j] = mat1->matrix[i][j] + mat2->matrix[i][j];
+		}
+	}
+	return ret_sum_mat;
+}
+
 matrix matrix_mul_scalar(matrix mat, double scalar)
 {
+	if(!matrix_is_well_allocated(mat))
+		return NULL;
+
 	matrix ret_mat = matrix_clone(mat);
 	for(size_t i = 0; i< mat->rows; i++)
 	{
@@ -298,8 +399,42 @@ matrix matrix_mul_scalar(matrix mat, double scalar)
 	return ret_mat;
 }
 
+matrix matrix_mul_matrix(matrix mat1, matrix mat2)
+{
+	if(!matrix_is_well_allocated(mat1) || !matrix_is_well_allocated(mat2))
+		return NULL;
+
+	if(mat1->cols != mat2->rows) //number of cols of mat1 must be equal to number of rows of mat2
+		return NULL;
+
+	matrix ret_mul_mat = matrix_alloc(mat1->rows, mat2->cols);
+
+	unsigned mat_ret_col = 0;
+	for(size_t i = 0; i<mat1->rows; i++)
+	{
+		for(size_t k = 0; k<ret_mul_mat->cols; k++)
+		{
+			double value = 0.0;
+			for(size_t j = 0; j<mat2->cols; j++)
+			{
+				value += (mat1->matrix[i][j])*(mat2->matrix[j][mat_ret_col]);
+			}
+			ret_mul_mat->matrix[i][mat_ret_col] = value;
+
+			mat_ret_col = (mat_ret_col+1)% ret_mul_mat->cols;
+		}
+	}
+	return ret_mul_mat;
+}
+
 void matrix_dispose(matrix mat)
 {
+	if(!matrix_is_well_allocated(mat))
+	{
+		free(mat);
+		return;
+	}
+
 	free(mat->matrix);
 	mat->cols=0;
 	mat->rows=0;
@@ -308,8 +443,11 @@ void matrix_dispose(matrix mat)
 
 void matrix_print(matrix mat)
 {
-	if(mat == NULL)
+	if(!matrix_is_well_allocated(mat))
+	{
+		printf("!!! Matrix NOT well allocated !!!\n");
 		return;
+	}
 	for(size_t i = 0; i< (mat->rows*10); i++)
 		printf("-");
 	putchar('\n');

@@ -15,6 +15,18 @@ typedef struct mm
 
 matrix matrix_alloc(size_t rows, size_t cols);
 
+bool matrix_is_well_allocated(matrix mat);
+
+bool matrix_is_equal_size_matrix(matrix mat1, matrix mat2);
+
+bool matrix_is_equal_matrix(matrix mat1, matrix mat2);
+
+bool matrix_is_square(matrix mat);
+
+bool matrix_is_invertible(matrix mat);
+
+bool matrix_is_nonnegative(matrix mat);
+
 matrix matrix_clone(matrix mat);
 
 double matrix_det(matrix mat);
@@ -33,13 +45,15 @@ matrix * _matrix_get_square_submatrices_from_rectangle(matrix mat, size_t *numbe
 
 matrix rotate_matrix(matrix mat);
 
-bool matrix_is_invertible(matrix mat);
-
 matrix matrix_inverse(matrix mat);
 
 matrix matrix_cofactor(matrix mat);
 
+matrix matrix_sum_matrix(matrix mat1, matrix mat2);
+
 matrix matrix_mul_scalar(matrix mat, double scalar);
+
+matrix matrix_mul_matrix(matrix mat1, matrix mat2);
 
 matrix matrix_transpose(matrix mat);
 
