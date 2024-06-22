@@ -27,6 +27,8 @@ bool matrix_is_invertible(matrix mat);
 
 bool matrix_is_nonnegative(matrix mat);
 
+bool matrix_is_orthogonal(matrix mat);
+
 matrix matrix_clone(matrix mat);
 
 matrix matrix_id(size_t size);

@@ -90,6 +90,23 @@ bool matrix_is_nonnegative(matrix mat)
 	return true;
 }
 
+bool matrix_is_orthogonal(matrix mat)
+{
+	//if mat * mat^-1 = id is orthogonal
+
+	if(!matrix_is_well_allocated(mat) || !matrix_is_square(mat))
+	{
+		return false;
+	}
+
+	matrix id_sized = matrix_id(mat->rows);
+	matrix mat_t = matrix_transpose(mat);
+	matrix prod = matrix_mul_matrix(mat, mat_t);
+
+	//return bool
+	return matrix_is_equal_matrix(prod, id_sized);
+}
+
 matrix matrix_clone(matrix mat)
 {
 	if(!matrix_is_well_allocated(mat))
