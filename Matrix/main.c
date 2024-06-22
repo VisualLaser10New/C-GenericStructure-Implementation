@@ -22,6 +22,9 @@ void try_mul_matrix()
 
 	matrix mat3 = matrix_mul_matrix(mat1, mat2);
 	printf("Mul of matrices\n");
+	matrix_print(mat1);
+	matrix_print(mat2);
+
 	matrix_print(mat3);
 }
 

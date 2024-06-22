@@ -29,6 +29,8 @@ bool matrix_is_nonnegative(matrix mat);
 
 matrix matrix_clone(matrix mat);
 
+matrix matrix_id(size_t size);
+
 double matrix_det(matrix mat);
 
 double matrix_det2(matrix mat);
@@ -60,3 +62,10 @@ matrix matrix_transpose(matrix mat);
 void matrix_dispose(matrix mat);
 
 void matrix_print(matrix mat);
+
+//GAUSS MOVES
+matrix matrix_gauss_rows_swap(matrix mat, size_t r1, size_t r2);
+
+matrix matrix_gauss_row_mul_scalar(matrix mat, size_t row, double scalar);
+
+matrix matrix_gauss_row_add(matrix mat, size_t row_base, size_t row_seek, double scalar);

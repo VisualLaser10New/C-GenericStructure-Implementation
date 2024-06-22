@@ -6,3 +6,4 @@
 3. C Queue Implementation
 	1. With a circular array
 	2. With linked list (non circular)
+4. Algebric Matrix

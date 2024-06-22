@@ -105,6 +105,23 @@ matrix matrix_clone(matrix mat)
 	return mat_clone;
 }
 
+matrix matrix_id(size_t size)
+{
+	//generate the id matrix, with size as rows ad cols
+	matrix ret_mat = matrix_alloc(size, size);
+	for(size_t r = 0; r<size; r++)
+	{
+		for(size_t c = 0; c<size; c++)
+		{
+			if(r==c)
+				ret_mat->matrix[r][c] = 1.0;
+			else
+				ret_mat->matrix[r][c] = 0.0;
+
+		}
+	}
+}
+
 int sign(size_t i, size_t j)
 {
 	i++; j++; //position from zero base to one base
@@ -412,16 +429,14 @@ matrix matrix_mul_matrix(matrix mat1, matrix mat2)
 	unsigned mat_ret_col = 0;
 	for(size_t i = 0; i<mat1->rows; i++)
 	{
-		for(size_t k = 0; k<ret_mul_mat->cols; k++)
+		for(size_t k = 0; k<mat2->cols; k++)
 		{
 			double value = 0.0;
-			for(size_t j = 0; j<mat2->cols; j++)
+			for(size_t j = 0; j<mat2->rows; j++)
 			{
-				value += (mat1->matrix[i][j])*(mat2->matrix[j][mat_ret_col]);
+				value += (mat1->matrix[i][j])*(mat2->matrix[j][k]);
 			}
-			ret_mul_mat->matrix[i][mat_ret_col] = value;
-
-			mat_ret_col = (mat_ret_col+1)% ret_mul_mat->cols;
+			ret_mul_mat->matrix[i][k] = value;
 		}
 	}
 	return ret_mul_mat;
@@ -464,4 +479,78 @@ void matrix_print(matrix mat)
 	for(size_t i = 0; i< mat->rows*10; i++)
 		printf("-");
 	putchar('\n');
+}
+
+// GAUSS
+matrix matrix_gauss_rows_swap(matrix mat, size_t r1, size_t r2)
+{
+	//swap two rows
+	if(!matrix_is_well_allocated(mat))
+	{
+		return NULL;
+	}
+
+	if(r1<0 || r1 >= mat->rows || r2<0 || r2>=mat->rows)
+	{
+		return NULL;
+	}
+
+	matrix ret_mat = matrix_clone(mat);
+	double tmp = 0.0;
+	for(size_t c = 0; c<mat->cols; c++)
+	{
+		tmp = ret_mat->matrix[r1][c];
+		ret_mat->matrix[r1][c] = ret_mat->matrix[r2][c];
+		ret_mat->matrix[r2][c] = tmp;
+	}
+
+	return ret_mat;
+}
+
+matrix matrix_gauss_row_mul_scalar(matrix mat, size_t row, double scalar)
+{
+	//multiply a row by a not-null scalar
+
+	if(scalar == 0.0 || row <0 || row>=mat->rows)
+	{
+		return NULL;
+	}
+
+	if(!matrix_is_well_allocated(mat))
+	{
+		return NULL;
+	}
+	
+	matrix ret_mat = matrix_clone(mat);
+
+	for(size_t i = 0; i< mat->cols; i++)
+	{
+		mat->matrix[row][i] = mat->matrix[row][i] * scalar;
+	}
+
+	return ret_mat;
+}
+
+matrix matrix_gauss_row_add(matrix mat, size_t row_base, size_t row_seek, double scalar)
+{
+	//replace a row_base with: row_base + (row_seek * scalar)
+
+	if(scalar == 0.0 || row_base <0 || row_base>=mat->rows || row_seek <0 || row_seek>=mat->rows)
+	{
+		return NULL;
+	}
+
+	if(!matrix_is_well_allocated(mat))
+	{
+		return NULL;
+	}
+	
+	matrix ret_mat = matrix_clone(mat);
+
+	for(size_t i = 0; i< mat->cols; i++)
+	{
+		mat->matrix[row_base][i] = mat->matrix[row_base][i] + (mat->matrix[row_seek][i] * scalar);
+	}
+
+	return ret_mat;
 }
