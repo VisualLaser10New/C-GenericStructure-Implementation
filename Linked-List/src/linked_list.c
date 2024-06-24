@@ -665,9 +665,37 @@ link rotating_shift_list(link list, long offset)
 		}
 		
 		link tmp_ret_list = shift_list(ret_list, sign_offset, pad_value);
-		destroy_list(ret_list); //dispose previous list, because shift_list generate a clone of the list each time
+		destroy_list(&ret_list); //dispose previous list, because shift_list generate a clone of the list each time
 		ret_list = tmp_ret_list;
 	}
 
+	return ret_list;
+}
+
+
+link shuffle_list(link list)
+{
+	srand(time(NULL));
+	size_t len = llength(list);
+	link ret_list = clone_list(&list);
+	while(len)
+	{
+		size_t i = rand() % len--;
+		swap_elements_list(&ret_list, i, len);
+	}
+	return ret_list;
+}
+
+link list_pad(link list, size_t len_reach, int value)
+{
+	//reach the len_reach with by filling new values with value
+	//if len_reach is negative pad before, else pad after
+	link ret_list = clone_list(&list);
+	size_t i = (len_reach<0)? 0: llength(ret_list);
+	len_reach=(len_reach<0)?len_reach-llength(ret_list): len_reach;
+	for(; i< len_reach; i++)
+	{
+		insert_val(&ret_list, value, i-1);
+	}
 	return ret_list;
 }

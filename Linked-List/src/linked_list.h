@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 
 #define max(a,b) ({ __typeof__ (a) _a = (a); __typeof__ (b) _b = (b); _a > _b ? _a : _b; })
@@ -125,6 +126,11 @@ void destroy_list(link* list);
 void remove_last(link list);
 #endif
 
+#ifndef PADLIST
+#define PADLIST
+link list_pad(link list, size_t len_reach, int value);
+#endif
+
 #ifndef SUBLIST
 #define SUBLIST
 link sublist(link list, unsigned from, unsigned to);
@@ -185,6 +191,11 @@ float avg_value_list(link list);
 #define SHIFTING
 link shift_list(link list, long offset, int pad_values);
 link rotating_shift_list(link list, long offset);
+#endif
+
+#ifndef SHUFFLE
+#define SHUFFLE
+link shuffle_list(link list);
 #endif
 
 

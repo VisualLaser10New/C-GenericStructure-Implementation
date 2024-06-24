@@ -51,4 +51,12 @@ int main()
 	printf("\nReverse the shellsorted list5 and print with articulate function\n");
 	list5 = reverse_list(&list5);
 	print_list(list5);
+
+	printf("\nShuffle list5\n");
+	list5 = shuffle_list(list5);
+	print_list(list5);
+
+	printf("\nResort list\n");
+	list5= mergesort_list(list5);
+	print_list(list5);
 }
